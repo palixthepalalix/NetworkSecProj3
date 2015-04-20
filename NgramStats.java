@@ -1,4 +1,3 @@
-package ngram;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,6 +29,7 @@ public class NgramStats {
 			if(arg0 instanceof MapEntry) {
 				MapEntry other = (MapEntry) arg0;
 				if(count.equals(other.getCount())) {
+
 					return value.compareTo(other.getBytes());
 				}
 				return count.compareTo(other.count);
@@ -63,7 +63,7 @@ public class NgramStats {
 		int iter = list.size() - 1;
 		for(int i = 0; i < 20; i++) {
 			MapEntry ent = list.get(iter);
-			String output =  i + " " + formatByteArr(ent.getBytes().array()) + " " + ent.getCount() + "\n";
+			String output =  formatByteArr(ent.getBytes().array()) + " " + ent.getCount() + "\n";
 			out.write(output.getBytes());
 			iter--;
 		}
@@ -91,12 +91,16 @@ public class NgramStats {
 			System.out.println(n + " and " + s + " are invalid values for n and s.");
 			return;
 		}
-		String outname = "outputs/stats_";
+		String outname = args[2];
+        String progDir = args[3];
 		NgramStats ngs = new NgramStats();
-		Ngram ng = new Ngram(n, s);
-		for(int i = 2; i < args.length; i++) {
-			String inf = args[i];
-			OutputStream out = new FileOutputStream(outname + inf + "_" + n + "_" + s);
+		for(int i = 4; i < args.length; i++) {
+		    Ngram ng = new Ngram(n, s);
+			String inf = progDir + args[i];
+            String[] tmp = inf.split("/");
+
+            String progName = tmp[tmp.length - 1];
+			OutputStream out = new FileOutputStream(outname + progName + "_" + n + "_" + s);
 			ngs.getStats(out, inf, ng);
 		}
 		

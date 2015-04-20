@@ -1,4 +1,3 @@
-package ngram;
 
 
 import java.io.File;
