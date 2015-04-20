@@ -1,3 +1,5 @@
+package ngram;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,13 +11,10 @@ import java.util.*;
 
 public class Ngram {
 	
-	private int n;
-	private int s;
-	
 	Map<ByteBuffer, Integer> countMap = new HashMap<ByteBuffer, Integer>();
 	
 	
-	private void createMap(byte[] buffer) {
+	private void createMap(byte[] buffer, int n, int s) {
 		int finish = buffer.length - n + 1;
 		for(int i = 0; i < finish; i+=s) {
 			byte[] subArr = new byte[n];
@@ -73,8 +72,6 @@ public class Ngram {
 	}
 	
 	public void initNgram(int n, int s, String inF, OutputStream outF) {
-		this.n = n;
-		this.s = s;
 		FileInputStream inStream = null;
 		byte[] buffer = new byte[1000];
 		try {
@@ -84,7 +81,7 @@ public class Ngram {
 				/*
 				 * add that shit to hashmap or whatever here
 				 */
-				createMap(buffer);
+				createMap(buffer, n, s);
 				
 			}
 			inStream.close();
@@ -109,15 +106,37 @@ public class Ngram {
         if(args.length != 4) {
             System.out.println("Usage: {exe} {length of ngrams} " + 
                     "{length of slide} {file to analyze} {name of output file}");
+            return;
         }
+        
         System.out.println(args.length);
-		String inFile = System.getProperty("user.dir") + 
-				"/examples/prog1";
+		String inFile = args[2];
 		System.out.println(inFile);
 		//String outfile = System.getProperty("user.dir") + "/src/examples/out";
-		OutputStream out = System.out;
-		int n = 3;
-		int s = 1;
+		OutputStream out = null;
+		if(args[3].equals("stdout")) {
+			out = System.out;
+		}
+		else {
+			try {
+				out = new FileOutputStream(args[3]);
+			} catch(FileNotFoundException e) {
+				System.out.println("Output file " + args[3] + " was not found.");
+				return;
+			}
+		}
+		int n = 0, s = 0;
+		try {
+			n = Integer.valueOf(args[0]);
+			s = Integer.valueOf(args[1]);
+		} catch(NumberFormatException e) {
+			System.out.println(args[0] + " and " + args[1] + " are not valid integers");
+			return;
+		}
+		if(s > n || s < 0 || n > 3 || n < 0) {
+			System.out.println(n + " and " + s + " are invalid values for n and s.");
+			return;
+		}
 		Ngram ng = new Ngram();
 		ng.initNgram(n, s, inFile, out);
 		ng.writeToFile(out);
