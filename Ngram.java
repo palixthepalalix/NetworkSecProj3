@@ -1,3 +1,5 @@
+package ngram;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,9 +13,15 @@ import java.util.*;
 public class Ngram {
 	
 	Map<ByteBuffer, Integer> countMap = new HashMap<ByteBuffer, Integer>();
+	int n;
+	int s;
 	
+	public Ngram(int n, int s) {
+		this.n = n;
+		this.s = s;
+	}
 	
-	private void createMap(byte[] buffer, int n, int s) {
+	private void createMap(byte[] buffer) {
 		int finish = buffer.length - n + 1;
 		for(int i = 0; i < finish; i+=s) {
 			byte[] subArr = new byte[n];
@@ -72,7 +80,7 @@ public class Ngram {
 		
 	}
 	
-	public void initNgram(int n, int s, String inF, OutputStream outF) {
+	public void getCounts(String inF) {
 		FileInputStream inStream = null;
 		byte[] buffer = new byte[1000];
 		try {
@@ -82,7 +90,7 @@ public class Ngram {
 				/*
 				 * add that shit to hashmap or whatever here
 				 */
-				createMap(buffer, n, s);
+				createMap(buffer);
 				
 			}
 			inStream.close();
@@ -97,6 +105,11 @@ public class Ngram {
 		
 		
 	}
+	
+	public Map<ByteBuffer, Integer> getMap() {
+		return countMap;
+	}
+	
 	
 	
 	public static void main(String[] args) {
@@ -128,7 +141,7 @@ public class Ngram {
 				return;
 			}
 		}
-		int n = 0, s = 0;
+		int n, s;
 		try {
 			n = Integer.valueOf(args[0]);
 			s = Integer.valueOf(args[1]);
@@ -140,8 +153,8 @@ public class Ngram {
 			System.out.println(n + " and " + s + " are invalid values for n and s.");
 			return;
 		}
-		Ngram ng = new Ngram();
-		ng.initNgram(n, s, inFile, out);
+		Ngram ng = new Ngram(n , s);
+		ng.getCounts(inFile);
 		ng.writeToFile(out);
 	}
 
