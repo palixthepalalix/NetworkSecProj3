@@ -56,8 +56,10 @@ public class Ngram {
 		try {
 			//FileOutputStream outStream = new FileOutputStream(outF);
 			for(Map.Entry<ByteBuffer, Integer> e : countMap.entrySet()) {
-				if(e.getValue() > 1)
-					System.out.println( formatByteArr(e.getKey().array()) + " " + e.getValue());
+				if(e.getValue() > 1) {
+					String output =  formatByteArr(e.getKey().array()) + " " + e.getValue() + "\n";
+					outStream.write(output.getBytes());
+                }
 			}
 			
 		} catch (Exception e) {
@@ -113,10 +115,12 @@ public class Ngram {
 		System.out.println(inFile);
 		//String outfile = System.getProperty("user.dir") + "/src/examples/out";
 		OutputStream out = null;
-		if(args[3].equals("stdout")) {
+        
+		if(args[3].equals("stdout") ) {
 			out = System.out;
 		}
-		else {
+       
+	    else {
 			try {
 				out = new FileOutputStream(args[3]);
 			} catch(FileNotFoundException e) {

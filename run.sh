@@ -17,8 +17,8 @@ do
     do
         while [ $s -le $n ]
         do
-            echo java Ngram $n $s examples/${EXAMPLES[$count]} outfiles/out${count}
-            java Ngram $n $s examples/${EXAMPLES[$count]} outfiles/out${count}
+            echo java Ngram $n $s examples/${EXAMPLES[$count]} outfiles/out${EXAMPLES[$count]}_${n}_${s}
+            java Ngram $n $s examples/${EXAMPLES[$count]} outfiles/out${EXAMPLES[$count]}_${n}_${s}
             s=$((s+1))
         done
         s=1
