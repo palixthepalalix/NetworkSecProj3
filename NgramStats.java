@@ -1,3 +1,5 @@
+package ngram;
+
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,6 +54,8 @@ public class NgramStats {
 	
 	public void getStats(OutputStream out, String inFile, Ngram ng) throws IOException {
 		ng.getCounts(inFile);
+		int totalCount = ng.getTotalCount();
+		double percent;
 		Map<ByteBuffer, Integer> countMap = ng.getMap();
 		ArrayList<MapEntry> list = new ArrayList<MapEntry>();
 		
@@ -63,7 +67,9 @@ public class NgramStats {
 		int iter = list.size() - 1;
 		for(int i = 0; i < 20; i++) {
 			MapEntry ent = list.get(iter);
-			String output =  formatByteArr(ent.getBytes().array()) + " " + ent.getCount() + "\n";
+			percent = (ent.getCount() / totalCount) * 100;
+			String output =  formatByteArr(ent.getBytes().array()) + " " + ent.getCount() 
+					+ " " + String.format("%.2f", percent) + "%" + "\n";
 			out.write(output.getBytes());
 			iter--;
 		}

@@ -1,3 +1,5 @@
+package ngram;
+
 
 
 import java.io.File;
@@ -14,10 +16,15 @@ public class Ngram {
 	Map<ByteBuffer, Integer> countMap = new HashMap<ByteBuffer, Integer>();
 	int n;
 	int s;
+	int totalCount = 0;
 	
 	public Ngram(int n, int s) {
 		this.n = n;
 		this.s = s;
+	}
+	
+	public int getTotalCount() {
+		return totalCount;
 	}
 	
 	private void createMap(byte[] buffer) {
@@ -42,6 +49,7 @@ public class Ngram {
 
 				countMap.put(wrapper, 1);
 			}
+			totalCount++;
 		}
 		
 	}
@@ -59,16 +67,23 @@ public class Ngram {
 	}
 	
 	public void writeToFile(OutputStream outStream) {
-		
+		int unique = 0;
 		try {
 			//FileOutputStream outStream = new FileOutputStream(outF);
 			for(Map.Entry<ByteBuffer, Integer> e : countMap.entrySet()) {
 				if(e.getValue() > 1) {
-					String output =  formatByteArr(e.getKey().array()) + " " + e.getValue() + "\n";
+					double percent = (e.getValue() / totalCount) * 100;
+					String output =  formatByteArr(e.getKey().array()) + " " + e.getValue() 
+							+ " " + String.format("%.2f", percent) + "%" + "\n";
 					outStream.write(output.getBytes());
                 }
+				else {
+					unique++;
+				}
 			}
-			
+			double uniquePercent = (unique / totalCount) * 100;
+			String uniqueOutput = String.format("%.2f", uniquePercent) + "% of ngrams are unique.";
+			outStream.write(uniqueOutput.getBytes());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			/*
@@ -84,8 +99,7 @@ public class Ngram {
 		byte[] buffer = new byte[1000];
 		try {
 			inStream = new FileInputStream(inF);
-			int read = 0;
-			while((read = inStream.read(buffer)) != -1) {
+			while(inStream.read(buffer) != -1) {
 				/*
 				 * add that shit to hashmap or whatever here
 				 */
