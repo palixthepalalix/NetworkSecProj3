@@ -2,6 +2,7 @@
 
 javac Ngram.java
 javac NgramStats.java
+rm -f outfiles/*
 
 declare -a EXAMPLES=('prog1' 'prog2' 'prog3' 'prog4' 'prog5' 'prog6.java')
 
@@ -18,7 +19,7 @@ do
     do
         while [ $s -le $n ]
         do
-            java Ngram $n $s examples/${EXAMPLES[$count]} outfiles/out${EXAMPLES[$count]}_${n}_${s}
+            java Ngram $n $s examples/${EXAMPLES[$count]} outfiles/ngram_${EXAMPLES[$count]}_${n}_${s}
             s=$((s+1))
         done
         s=1
@@ -43,6 +44,18 @@ do
     sort strings_outputs/strings_prog$c > strings_outputs/sorted_prog$c
     echo strings ${EXAMPLES[$c]}
     c=$((c+1))
+done
+
+i=0
+while [ $i -lt $tLen ]
+do
+    j=0
+    while [ $j -lt $tLen ]
+    do
+        java NgramAnalysis outfiles/ngram_${EXAMPLES[$i]}_3_1 outfiles/ngram_${EXAMPLES[$j]}_3_1 > ${EXAMPLES[$i]}_${EXAMPLES[$j]}
+        j=$((j+1))
+    done
+    i=$((i+1))
 done
 
 
