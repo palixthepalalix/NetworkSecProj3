@@ -1,6 +1,7 @@
 #!/bin/bash
 
 javac Ngram.java
+javac NgramStats.java
 
 declare -a EXAMPLES=('prog1' 'prog2' 'prog3' 'prog4' 'prog5' 'prog6.java')
 

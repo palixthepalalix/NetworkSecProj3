@@ -1,6 +1,3 @@
-package ngram;
-
-
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,14 +13,14 @@ public class Ngram {
 	Map<ByteBuffer, Integer> countMap = new HashMap<ByteBuffer, Integer>();
 	int n;
 	int s;
-	int totalCount = 0;
+	double totalCount = 0;
 	
 	public Ngram(int n, int s) {
 		this.n = n;
 		this.s = s;
 	}
 	
-	public int getTotalCount() {
+	public double getTotalCount() {
 		return totalCount;
 	}
 	
@@ -67,12 +64,12 @@ public class Ngram {
 	}
 	
 	public void writeToFile(OutputStream outStream) {
-		int unique = 0;
+		double unique = 0;
 		try {
 			//FileOutputStream outStream = new FileOutputStream(outF);
 			for(Map.Entry<ByteBuffer, Integer> e : countMap.entrySet()) {
 				if(e.getValue() > 1) {
-					double percent = (e.getValue() / totalCount) * 100;
+					double percent = (((double)e.getValue()) / totalCount) * 100;
 					String output =  formatByteArr(e.getKey().array()) + " " + e.getValue() 
 							+ " " + String.format("%.2f", percent) + "%" + "\n";
 					outStream.write(output.getBytes());
@@ -136,9 +133,7 @@ public class Ngram {
             return;
         }
         
-        System.out.println(args.length);
 		String inFile = args[2];
-		System.out.println(inFile);
 		//String outfile = System.getProperty("user.dir") + "/src/examples/out";
 		OutputStream out = null;
         
