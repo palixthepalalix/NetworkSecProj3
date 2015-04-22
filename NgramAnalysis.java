@@ -1,4 +1,3 @@
-package ngram;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,9 +31,11 @@ public class NgramAnalysis {
 			BufferedReader br = new BufferedReader(new FileReader(inFile));
 			for(String line; (line = br.readLine())!= null;) {
 				String[] values = line.split(" ");
-				String hexValue = values[0];
-				Integer count = Integer.valueOf(values[1]);
-				buffer.put(hexValue, count);
+                if(values.length < 4) {
+                    String hexValue = values[0];
+                    Integer count = Integer.valueOf(values[1]);
+                    buffer.put(hexValue, count);
+                }
 			}
 			br.close();
 		} catch (Exception e) {

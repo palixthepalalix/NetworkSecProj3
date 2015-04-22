@@ -1,3 +1,12 @@
+/*
+ * Author: Alix Cook
+ * amc2316
+ *
+ * This program computes the ngrams for n=1,2,3 and s=1 to n
+ * and writes the hex value, count and percent of ngrams found
+ * in file
+ * just gives a percentage for the amount of ngram values that are unique
+ */
 
 import java.io.File;
 import java.io.FileInputStream;

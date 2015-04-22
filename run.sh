@@ -46,13 +46,15 @@ do
     c=$((c+1))
 done
 
+rm -f compare/comparisons
+
 i=0
 while [ $i -lt $tLen ]
 do
-    j=0
+    j=$((i+1))
     while [ $j -lt $tLen ]
     do
-        java NgramAnalysis outfiles/ngram_${EXAMPLES[$i]}_3_1 outfiles/ngram_${EXAMPLES[$j]}_3_1 > ${EXAMPLES[$i]}_${EXAMPLES[$j]}
+        java NgramAnalysis outfiles/ngram_${EXAMPLES[$i]}_3_1 outfiles/ngram_${EXAMPLES[$j]}_3_1 >> compare/comparisons
         j=$((j+1))
     done
     i=$((i+1))
